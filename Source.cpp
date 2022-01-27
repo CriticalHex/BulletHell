@@ -7,6 +7,8 @@
 #include"SFML/Graphics.hpp"
 #include"globals.h"
 #include"missiles.h"
+#include"bullets.h"
+#include"stars.h"
 using namespace std;
 
 int main() {
@@ -40,6 +42,11 @@ int main() {
     sf::Sprite MissilePic;
     MissilePic.setTexture(MissileImg);
 
+    //bullet setup
+    double minBullets = 60;
+    int counter = 0;
+    int moveTimer = 0;
+
     //vector for missiles
     vector<missile*> missiles; //Creates a VECTOR, that POINTS to CLASS missiles
     vector<missile*>::iterator iter2; //Creates an ITERATOR, that will iterate through the missiles VECTOR
@@ -47,6 +54,19 @@ int main() {
         missile* newMissile = new missile(xpos, ypos, MissilePic); //using class constructor to instantiate missiles
         missiles.push_back(newMissile); //puts these missiles into the back of the vector
     }
+
+    //vector for bullets
+    vector<bullet*> bullets; 
+    vector<bullet*>::iterator iter3;
+
+    //vector for stars
+    vector<star*> stars; 
+    vector<star*>::iterator iter4; 
+    for (int i = 0; i < 400; i++) {
+        star* newStar = new star(); 
+        stars.push_back(newStar);
+    }
+
 
     //################### HOLD ONTO YOUR BUTTS, ITS THE GAME LOOP###############################################################
     while (screen.isOpen()) {//keep window open until user shuts it down
@@ -93,6 +113,7 @@ int main() {
 
         }//end event loop---------------------------------------------------------------
 
+        //movement stuff
         if (keys[LEFT] == true) {
             vx = -5;
             playerImg = sf::IntRect((frameNum + 5) * 32, 0, -30, 30); //NEGATIVE width flips the image for us 
@@ -115,6 +136,22 @@ int main() {
         else
             vy = 0;
 
+        //bullet stuff
+        counter++;
+        minBullets -= .001; 
+        if (counter > minBullets) {
+            bullet* newbullet = new bullet(500,100, 0); 
+            bullets. push_back(newbullet); 
+            bullet* newbullet2 = new bullet(500, 100, 3.14); 
+            bullets.push_back(newbullet2); 
+            bullet* newbullet3 = new bullet(500, 100, 3.14 / 2); 
+            bullets. push_back(newbullet3); 
+            bullet* newbullet4 = new bullet(500, 100, 3 * 3.14 / 2); 
+            bullets. push_back(newbullet4); 
+            counter = 0;
+        }
+
+        //missile stuff
         justShot++;
         if (keys[SPACE] == true) {
             for (iter2 = missiles.begin(); iter2 != missiles.end(); iter2++) {
@@ -136,18 +173,65 @@ int main() {
             if ((*iter2)->isAlive())
                 (*iter2)->move();
         }
+
+        //move da bullets
+        moveTimer += 2; 
+        if (moveTimer > 2400) 
+            moveTimer = 0; 
+        for (iter3 = bullets.begin(); iter3 != bullets.end(); iter3++) {
+            if (moveTimer < 600) {
+                (*iter3)->move1();
+            }
+            else if (moveTimer < 1200) {
+                (*iter3)->move2();
+            }
+            else if (moveTimer < 1800) {
+                (*iter3)->move3();
+            }
+            else if (moveTimer < 2400) {
+                (*iter3)->move4();
+            }
+        }
+
+        //move da stars(so pretty)
+        for (iter4 = stars.begin(); iter4 != stars.end(); iter4++) {
+            (*iter4)->reposition();
+            (*iter4)->move();
+        }
+
         //kiel da missiles
         for (iter2 = missiles.begin(); iter2 != missiles.end(); iter2++) {
             if ((*iter2)->offScreen())
                 (*iter2)->kill();
         }
 
+        //kiel da bullets
+        for (iter3 = bullets.begin(); iter3 != bullets.end(); iter3++) {
+            if ((*iter3)->offScreen()) {
+                (*iter3)->~bullet(); //#destroyed
+                iter3 = bullets.erase(iter3); //remove from vector
+            }
+        }
+
+
         //render section-----------------------------------------
         screen.clear(); //wipes screen, without this things smear
 
         screen.draw(player); //draw player
+
+        //draw missiles
         for (iter2 = missiles.begin(); iter2 != missiles.end(); iter2++) {
                 (*iter2)->draw(screen);
+        }
+
+        //draw bullets
+        for (iter3 = bullets.begin(); iter3 != bullets.end(); iter3++) {
+            (*iter3)->draw(screen);
+        }
+
+        //draw stars?
+        for (iter4 = stars.begin(); iter4 != stars.end(); iter4++) {
+            (*iter4)->draw(screen);
         }
 
         screen.display(); //flips memory drawings onto screen

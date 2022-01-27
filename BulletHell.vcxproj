@@ -141,9 +141,13 @@
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="missiles.cpp" />
+    <ClCompile Include="bullets.cpp" />
+    <ClCompile Include="star.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h" />
+    <ClInclude Include="bullets.h" />
+    <ClInclude Include="stars.h" />
     <ClInclude Include="missiles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

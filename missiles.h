@@ -14,7 +14,8 @@ public:
 	missile(int x, int y);
 	void move();
 	void draw(sf::RenderWindow& window);
-	void kill(); bool offScreen();
+	void kill(); 
+	bool offScreen();
 	void shoot(int x, int y);
 	bool isAlive();
 	bool collide(double x, double y);
