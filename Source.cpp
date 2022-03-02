@@ -42,6 +42,11 @@ int main() {
     sf::Sprite MissilePic;
     MissilePic.setTexture(MissileImg);
 
+    sf::Texture BulletImg;
+    BulletImg.loadFromFile("bullet.png");
+    sf::Sprite BulletPic;
+    BulletPic.setTexture(BulletImg);
+
     //bullet setup
     double minBullets = 60;
     int counter = 0;
@@ -140,13 +145,13 @@ int main() {
         counter++;
         minBullets -= .001; 
         if (counter > minBullets) {
-            bullet* newbullet = new bullet(500,100, 0); 
+            bullet* newbullet = new bullet(500,100, 0, BulletPic); 
             bullets. push_back(newbullet); 
-            bullet* newbullet2 = new bullet(500, 100, 3.14); 
+            bullet* newbullet2 = new bullet(500, 100, 3.14, BulletPic); 
             bullets.push_back(newbullet2); 
-            bullet* newbullet3 = new bullet(500, 100, 3.14 / 2); 
+            bullet* newbullet3 = new bullet(500, 100, 3.14 / 2, BulletPic); 
             bullets. push_back(newbullet3); 
-            bullet* newbullet4 = new bullet(500, 100, 3 * 3.14 / 2); 
+            bullet* newbullet4 = new bullet(500, 100, 3 * 3.14 / 2, BulletPic); 
             bullets. push_back(newbullet4); 
             counter = 0;
         }
@@ -158,7 +163,6 @@ int main() {
                 if (((*iter2)->isAlive()) == false && justShot > 5) {
                     (*iter2)->shoot(xpos, ypos);
                     justShot = 0;
-                    cout << "PEW!" << endl;
                 }
             }
         }
@@ -238,5 +242,4 @@ int main() {
 
     }//######################## end game loop ###################################################################################
 
-    cout << "goodbye!" << endl;
 } //end of main

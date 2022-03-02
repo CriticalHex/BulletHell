@@ -69,8 +69,8 @@ void bullet::draw(sf::RenderWindow& window) {
 	shape.setFillColor(sf::Color(100, 250, 50));
 
 	if (isAlive) {
-		shape.setPosition(xpos, ypos);
-		window.draw(shape);
+		image.setPosition(xpos, ypos);
+		window.draw(image);
 	}
 }
 
